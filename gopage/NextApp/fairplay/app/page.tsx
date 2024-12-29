@@ -1,7 +1,7 @@
 
-import Navbar from "./components/nav";
-import FrontPage from "./components/frontpage";
-import Tasks from "./components/tasks";
+import Navbar from "@/components/nav";
+import FrontPage from "@/components/frontpage";
+// import Tasks from "@/app/navigation/tasks";
 
 
 
@@ -21,7 +21,7 @@ export default function Home() {
       <FrontPage/>
       </div>
   
-    <Tasks/>
+   
  
       
 
