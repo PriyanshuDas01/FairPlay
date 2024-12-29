@@ -1,6 +1,9 @@
-import Image from "next/image";
+
 import Navbar from "./components/nav";
 import FrontPage from "./components/frontpage";
+import Tasks from "./components/tasks";
+
+
 
 
 export default function Home() {
@@ -17,7 +20,10 @@ export default function Home() {
       <div className="relative">
       <FrontPage/>
       </div>
-
+  
+    <Tasks/>
+ 
+      
 
 </div>
     

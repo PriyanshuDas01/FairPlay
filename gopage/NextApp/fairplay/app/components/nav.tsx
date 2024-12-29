@@ -18,8 +18,8 @@ const Navbar: React.FC = () => {
   <Image
     src={Img1} 
     alt="FairPlay Logo"
-    width={70} // Adjust the width as needed
-    height={70} // Adjust the height as needed
+    width={50} // Adjust the width as needed
+    height={50} // Adjust the height as needed
     className="mr-2"
   />
   FairPlay
