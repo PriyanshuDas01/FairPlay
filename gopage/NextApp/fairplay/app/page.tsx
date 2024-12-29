@@ -8,7 +8,7 @@ import FrontPage from "@/components/frontpage";
 
 export default function Home() {
   return (
-    
+   
   
   <div className="relative">
       {/* Navbar */}

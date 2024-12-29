@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
 
             <SignedIn>
               <div className="ml-4">
-                <UserButton />
+                <UserButton/>
               </div>
             </SignedIn>
           </div>

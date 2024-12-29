@@ -54,13 +54,12 @@ func main() {
 
 	// CORS Middleware
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:3000",       // Allow frontend to make requests
-		AllowMethods:     "GET,POST,PATCH,DELETE",       // Allow all the necessary HTTP methods
-		AllowHeaders:     "Content-Type, Authorization", // Allow necessary headers
-		AllowCredentials: true,                          // Allow credentials if necessary
+		AllowOrigins:     "http://localhost:3000",
+		AllowMethods:     "GET,POST,PATCH,DELETE",
+		AllowHeaders:     "Content-Type, Authorization",
+		AllowCredentials: true,
 	}))
 
-	// Logging Middleware
 	app.Use(func(c *fiber.Ctx) error {
 		log.Printf("Received request: %s %s", c.Method(), c.Path())
 		return c.Next()
