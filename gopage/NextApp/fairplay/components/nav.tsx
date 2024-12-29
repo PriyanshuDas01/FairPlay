@@ -3,62 +3,64 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Img1 from "@/images/logo.png"
+import Img1 from "@/images/logo.png";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-black  md:opacity-80 sticky">
+    <nav className="bg-black md:opacity-80 sticky">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-          <a href="/" className="flex items-center text-white text-xl font-bold">
-  <Image
-    src={Img1} 
-    alt="FairPlay Logo"
-    width={50} // Adjust the width as needed
-    height={50} // Adjust the height as needed
-    className="mr-2"
-  />
-  FairPlay
-</a>
+            <a href="/" className="flex items-center text-white text-xl font-bold">
+              <Image
+                src={Img1}
+                alt="FairPlay Logo"
+                width={50}
+                height={50}
+                className="mr-2"
+              />
+              FairPlay
+            </a>
+          </div>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex">
-              <div className="ml-[35vh] flex items-baseline  space-x-4">
-                <Link
-                  href="/"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
-                >
-                  Home
-                </Link>
-
-                <Link
-                  href="/navigation\tasks"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
-                >
-                  Daily Tasks
-                </Link>
-              
-               
-                <Link
-                  href="/contact"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
-                >
-                  Contact
-                </Link>
-
-                <Link
-              href="/free-trial"
-              className="text-white font-semibold bg-blue-400 shadow-blue-600 shadow-md hover:bg-blue-500 hover:text-gray-200 px-4 py-1 mt-4 block text-center rounded-full"
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link
+              href="/"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
             >
-              Log In
+              Home
             </Link>
 
+            <Link
+              href="/navigation/tasks"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
+            >
+              Daily Tasks
+            </Link>
+
+            <Link
+              href="/contact"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
+            >
+              Contact
+            </Link>
+
+            <SignedOut>
+              <div className="text-white font-semibold bg-blue-400 shadow-blue-600 shadow-md hover:bg-blue-500 hover:text-gray-200 px-4 py-2 rounded-full">
+                <SignInButton />
               </div>
-            </div>
+            </SignedOut>
+
+            <SignedIn>
+              <div className="ml-4">
+                <UserButton />
+              </div>
+            </SignedIn>
           </div>
 
           {/* Mobile Menu Button */}
@@ -112,7 +114,7 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden" id="mobile-menu">
-          <div className="px-2 pb-2 sm:px-3 bg-black">
+          <div className="px-2 pb-2 sm:px-3 bg-black space-y-2">
             <Link
               href="/"
               className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
@@ -120,30 +122,31 @@ const Navbar: React.FC = () => {
               Home
             </Link>
 
-
             <Link
-                  href="/"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
-                >
-                  Daily Tasks
-                </Link>
-
+              href="/navigation/tasks"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Daily Tasks
+            </Link>
 
             <Link
               href="/contact"
               className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
             >
-
               Contact
             </Link>
 
-            {/* Free Trial Button */}
-            <Link
-              href="/free-trial"
-              className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 mt-4 block text-center rounded-md"
-            >
-              Log In
-            </Link>
+            <SignedOut>
+              <div className="text-white font-semibold bg-blue-400 shadow-blue-600 shadow-md hover:bg-blue-500 hover:text-gray-200 px-4 py-2 rounded-md text-center">
+                <SignInButton />
+              </div>
+            </SignedOut>
+
+            <SignedIn>
+              <div className="flex justify-center mt-2">
+                <UserButton />
+              </div>
+            </SignedIn>
           </div>
         </div>
       )}
