@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 )
 
 type Task struct {
@@ -18,14 +20,21 @@ func main() {
 	fmt.Println("Hello")
 	app := fiber.New()
 
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatal("Error loading the env!")
+	}
+
+	PORT := os.Getenv("PORT")
+
 	tasks := []Task{}
 
-	// Root route
+	// Root
 	app.Get("/api/tasks", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(tasks)
 	})
 
-	// POST route to create a new task
 	app.Post("/api/tasks", func(c *fiber.Ctx) error {
 		newTask := new(Task)
 
@@ -33,12 +42,10 @@ func main() {
 			return c.Status(400).JSON(fiber.Map{"error": "Invalid request body"})
 		}
 
-		// Validate the task body
 		if newTask.Body == "" {
 			return c.Status(400).JSON(fiber.Map{"error": "Task body can't be empty"})
 		}
 
-		// Assign a new ID and append to the tasks slice
 		newTask.ID = len(tasks) + 1
 		tasks = append(tasks, *newTask)
 
@@ -86,5 +93,5 @@ func main() {
 		return c.Status(404).JSON(fiber.Map{"error": "Task not found"})
 	})
 
-	log.Fatal(app.Listen(":4000"))
+	log.Fatal(app.Listen(":" + PORT))
 }
