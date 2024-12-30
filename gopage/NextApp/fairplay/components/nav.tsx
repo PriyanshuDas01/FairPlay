@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-black md:opacity-80 sticky">
+    <nav className="bg-black sticky">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -44,10 +44,10 @@ const Navbar: React.FC = () => {
             </Link>
 
             <Link
-              href="/contact"
+              href="/navigation/contacts"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
             >
-              Contact
+             Get Help!
             </Link>
             <Link
               href="/navigation/blogs"
@@ -136,10 +136,10 @@ const Navbar: React.FC = () => {
             </Link>
 
             <Link
-              href="/contact"
+              href="/navigation/contacts"
               className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
             >
-              Contact
+              Get Help!
             </Link>
             
             <Link

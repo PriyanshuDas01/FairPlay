@@ -1,9 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getBlogs } from '@/lib/api';
 import Image from "next/image"
 import Img1 from '@/images/2.jpg'
 import Navbar from "@/components/nav"
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 interface Blog {
   _id: string;
@@ -15,20 +16,42 @@ interface Blog {
 }
 
 export default function Blog() {
-  const [latestBlogs, setLatestBlogs] = useState<Blog[]>([]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchLatestBlogs = async () => {
+    const fetchBlogs = async () => {
       try {
-        const blogs = await getBlogs();
-        setLatestBlogs(blogs.slice(0, 3)); // Get the latest 3 blogs
+        const fetchedBlogs = await getBlogs();
+        setBlogs(fetchedBlogs);
       } catch (error) {
         console.error('Failed to fetch blogs:', error);
       }
     };
 
-    fetchLatestBlogs();
+    fetchBlogs();
   }, []);
+
+  const handleBlogClick = (blog: Blog) => {
+    setSelectedBlog(blog);
+  };
+
+  const handleClosePopup = () => {
+    setSelectedBlog(null);
+  };
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
 
   return (
     <>
@@ -83,8 +106,8 @@ export default function Blog() {
         <section className="container mx-auto px-4 py-12">
           <h2 className="mb-8 text-2xl font-bold">Latest Articles</h2>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {latestBlogs.map((blog) => (
-              <article key={blog._id} className="group cursor-pointer space-y-4">
+            {blogs.slice(0, 3).map((blog) => (
+              <article key={blog._id} className="group cursor-pointer space-y-4" onClick={() => handleBlogClick(blog)}>
                 <div className="relative aspect-video overflow-hidden rounded-lg">
                   <Image
                     src={blog.thumbnail || '/placeholder.svg'}
@@ -102,7 +125,62 @@ export default function Blog() {
             ))}
           </div>
         </section>
+
+        {/* Older Articles Side-Scroll */}
+        <section className="container mx-auto px-4 py-12">
+          <h2 className="mb-8 text-2xl font-bold">Older Articles</h2>
+          <div className="relative">
+            <button onClick={scrollLeft} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10">
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <div ref={scrollContainerRef} className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
+              {blogs.slice(3).map((blog) => (
+                <article key={blog._id} className="flex-shrink-0 w-64 cursor-pointer space-y-4" onClick={() => handleBlogClick(blog)}>
+                  <div className="relative aspect-video overflow-hidden rounded-lg">
+                    <Image
+                      src={blog.thumbnail || '/placeholder.svg'}
+                      alt={blog.title}
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium text-blue-600">Category</div>
+                    <h3 className="text-lg font-semibold text-gray-900">{blog.title}</h3>
+                    <p className="text-gray-600">{blog.content.substring(0, 50)}...</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <button onClick={scrollRight} className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10">
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        </section>
       </main>
+
+      {/* Blog Popup */}
+      {selectedBlog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto relative">
+            <button onClick={handleClosePopup} className="absolute top-4 right-4">
+              <X className="w-6 h-6" />
+            </button>
+            <h2 className="text-2xl font-bold mb-4">{selectedBlog.title}</h2>
+            {selectedBlog.thumbnail && (
+              <Image
+                src={selectedBlog.thumbnail}
+                alt={selectedBlog.title}
+                width={600}
+                height={400}
+                className="w-full h-64 object-cover rounded-lg mb-4"
+              />
+            )}
+            <p className="text-gray-600 mb-4">{selectedBlog.content}</p>
+            <p className="text-sm text-gray-500">By {selectedBlog.author} on {new Date(selectedBlog.createdAt).toLocaleDateString()}</p>
+          </div>
+        </div>
+      )}
     </>
   )
 }
