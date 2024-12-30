@@ -1,128 +1,215 @@
 'use client'
-import { useEffect, useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { getTasks, createTask, updateTask, deleteTask } from '@/lib/api';
-import Navbar from '@/components/nav';
-import Img1 from "@/images/target.png"
-import Image from 'next/image';
+
 interface Task {
   _id: string;
   body: string;
   completed: boolean;
 }
 
-const Tasks = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+export default function Tasks() {
+  const [tasks, setTasks] = useState<Task[] | null>(null);
   const [newTask, setNewTask] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const data = await getTasks();
-        setTasks(data);
-      } catch (error) {
-        console.error('Failed to fetch tasks:', error);
-      }
-    };
     fetchTasks();
   }, []);
+
+  const fetchTasks = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const fetchedTasks = await getTasks();
+      setTasks(fetchedTasks);
+    } catch (error) {
+      console.error('Failed to fetch tasks:', error);
+      setError('Failed to fetch tasks. Please try again later.');
+      setTasks([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleCreateTask = async () => {
     if (newTask.trim()) {
       try {
         const task = await createTask(newTask);
-        setTasks((prev) => [...prev, task]);
+        setTasks((prev) => (prev ? [...prev, task] : [task]));
         setNewTask('');
       } catch (error) {
         console.error('Failed to create task:', error);
+        setError('Failed to create task. Please try again.');
       }
     }
   };
 
-  const handleUpdateTask = async (id: string) => {
+  const handleUpdateTask = async (id: string, updatedBody: string) => {
     try {
-      await updateTask(id);
+      await updateTask(id, updatedBody);
       setTasks((prev) =>
-        prev.map((task) =>
-          task._id === id ? { ...task, completed: true } : task
-        )
+        prev ? prev.map((task) =>
+          task._id === id ? { ...task, body: updatedBody } : task
+        ) : null
       );
     } catch (error) {
       console.error('Failed to update task:', error);
+      setError('Failed to update task. Please try again.');
     }
   };
 
   const handleDeleteTask = async (id: string) => {
     try {
       await deleteTask(id);
-      setTasks((prev) => prev.filter((task) => task._id !== id));
+      setTasks((prev) => prev ? prev.filter((task) => task._id !== id) : null);
     } catch (error) {
       console.error('Failed to delete task:', error);
+      setError('Failed to delete task. Please try again.');
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="animate-pulse text-lg text-gray-600">Loading tasks...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="text-lg text-red-500 bg-red-50 px-4 py-2 rounded-lg">{error}</div>
+      </div>
+    );
+  }
+
+  const todoTasks = tasks?.filter(task => !task.completed) || [];
+  const completedTasks = tasks?.filter(task => task.completed) || [];
+
   return (
-    <div>
-    <Navbar />
-    <h1 className="text-4xl font-semibold text-center mt-[5vh] text-gray-800 mb-6">Goals</h1>
-    <p className="text-lg text-center mt-[5vh] text-gray-400 mb-6">"True champions rise not just by winning, but by playing with heart, honor, and respect—because the spirit of the game lies in fair play."</p>
-<div className="max-w-7xl mt-[20vh] mx-auto p-6  rounded-lg shadow-md shadow-green-600 flex flex-col lg:flex-row">
-  <div className="lg:w-2/3">
-
-    <div className="flex gap-4 mb-6">
-      <input
-        type="text"
-        className="flex-grow p-3 border border-gray-300 shadow-md shadow-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-        placeholder="Add a new task..."
-      />
-      <button
-        className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600  shadow-lg shadow-blue-600 transition-all duration-300"
-        onClick={handleCreateTask}
-      >
-        Add Task
-      </button>
-    </div>
-    <ul className="space-y-4">
-      {tasks.map((task) => (
-        <li key={task._id} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-all duration-300">
-          <span
-            className={`text-lg ${task.completed ? 'line-through text-gray-500' : 'text-gray-700'}`}
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6">Task Manager</h2>
+        <div className="flex gap-4 max-w-2xl">
+          <input
+            type="text"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleCreateTask()}
+            placeholder="Add a new task..."
+            className="flex-grow px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none text-gray-700 text-lg"
+          />
+          <button
+            onClick={handleCreateTask}
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors text-lg font-medium min-w-[120px] shadow-lg shadow-blue-100"
           >
-            {task.body}
-          </span>
-          <div className="flex gap-3">
-            {!task.completed && (
-              <button
-                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-300"
-                onClick={() => handleUpdateTask(task._id)}
-              >
-                Complete
-              </button>
-            )}
-            <button
-              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300"
-              onClick={() => handleDeleteTask(task._id)}
-            >
-              Delete
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
+            Add Task
+          </button>
+        </div>
+      </div>
 
-  {/* Image for larger screens */}
-  <div className="hidden  md:block lg:w-2/3 pl-[25vh]">
-  <Image
-          src={Img1}
-          alt="Opening Image"
-          className="w-[25vh] h-[25vh] object-cover"
-        />
-  </div>
-</div>
-</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* To Do Column */}
+        <div className="bg-gray-50 rounded-xl p-4">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+            To Do
+            <span className="ml-2 text-sm text-gray-500">({todoTasks.length})</span>
+          </h3>
+          {todoTasks.length === 0 ? (
+            <p className="text-center text-gray-500 py-8">No pending tasks</p>
+          ) : (
+            <ul className="space-y-3">
+              {todoTasks.map((task) => (
+                <li 
+                  key={task._id} 
+                  className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                >
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={task.completed}
+                      onChange={async () => {
+                        await handleUpdateTask(task._id, task.body);
+                      }}
+                      className="mt-1.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <div className="flex-grow">
+                      <input
+                        type="text"
+                        value={task.body}
+                        onChange={(e) => handleUpdateTask(task._id, e.target.value)}
+                        className="w-full bg-transparent border-0 p-0 focus:ring-0 text-gray-700"
+                      />
+                      <div className="mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => handleDeleteTask(task._id)}
+                          className="text-xs px-2 py-1 text-red-600 hover:bg-red-50 rounded"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Completed Column */}
+        <div className="bg-gray-50 rounded-xl p-4">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-green-500"></div>
+            Completed
+            <span className="ml-2 text-sm text-gray-500">({completedTasks.length})</span>
+          </h3>
+          {completedTasks.length === 0 ? (
+            <p className="text-center text-gray-500 py-8">No completed tasks</p>
+          ) : (
+            <ul className="space-y-3">
+              {completedTasks.map((task) => (
+                <li 
+                  key={task._id} 
+                  className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                >
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={task.completed}
+                      onChange={async () => {
+                        await handleUpdateTask(task._id, task.body);
+                      }}
+                      className="mt-1.5 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                    />
+                    <div className="flex-grow">
+                      <input
+                        type="text"
+                        value={task.body}
+                        onChange={(e) => handleUpdateTask(task._id, e.target.value)}
+                        className="w-full bg-transparent border-0 p-0 focus:ring-0 text-gray-500 line-through"
+                      />
+                      <div className="mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => handleDeleteTask(task._id)}
+                          className="text-xs px-2 py-1 text-red-600 hover:bg-red-50 rounded"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
   );
-};
+}
 
-export default Tasks;

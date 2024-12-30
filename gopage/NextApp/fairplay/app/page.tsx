@@ -3,7 +3,7 @@ import Navbar from "@/components/nav";
 import FrontPage from "@/components/frontpage";
 // import Tasks from "@/app/navigation/tasks";
 import QuizGame from "@/components/quiz";
-
+import Blog from "@/components/blogs";
 
 
 
@@ -22,8 +22,10 @@ export default function Home() {
       <FrontPage/>
       </div>
   
+
+   <Blog/>
+    
    <QuizGame/>
- 
       
 
 </div>
