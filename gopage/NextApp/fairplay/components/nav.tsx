@@ -53,7 +53,7 @@ const Navbar: React.FC = () => {
               href="/navigation/blogs"
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
             >
-              Blog
+              Post Blog
             </Link>
 
             <SignedOut>
@@ -141,7 +141,13 @@ const Navbar: React.FC = () => {
             >
               Contact
             </Link>
-
+            
+            <Link
+              href="/navigation/blogs"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-full text-sm lg:text-base font-medium"
+            >
+              Post Blog
+            </Link>
             <SignedOut>
               <div className="text-white font-semibold bg-blue-400 shadow-blue-600 shadow-md hover:bg-blue-500 hover:text-gray-200 px-4 py-2 rounded-md text-center">
                 <SignInButton />

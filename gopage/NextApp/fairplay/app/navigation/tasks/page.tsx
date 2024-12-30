@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getTasks, createTask, updateTask, deleteTask } from '@/lib/api';
+import Navbar from '@/components/nav';
 
 interface Task {
   _id: string;
@@ -91,6 +92,8 @@ export default function Tasks() {
   const completedTasks = tasks?.filter(task => task.completed) || [];
 
   return (
+    <>
+    <Navbar/>
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-6">Task Manager</h2>
@@ -203,6 +206,7 @@ export default function Tasks() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
