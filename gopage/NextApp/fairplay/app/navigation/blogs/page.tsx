@@ -100,7 +100,6 @@
 //     </>
 //   )
 // }
-
 'use client';
 import { useEffect, useState } from 'react';
 import { getBlogs, createBlog, updateBlog, deleteBlog } from '@/lib/api';
@@ -167,35 +166,35 @@ const Blogs = () => {
   };
 
   return (
-    <div>
+    <div className="bg-gray-900 text-gray-100 rounded-md">
       <Navbar />
-      <h1 className="text-4xl font-semibold text-center mt-[5vh] text-gray-800 mb-6">Blog Posts</h1>
-      <p className="text-lg text-center mt-[5vh] text-gray-400 mb-6">"Writing is the painting of the voice."</p>
-      <div className="max-w-7xl mt-[20vh] mx-auto p-6 rounded-lg shadow-md shadow-green-600 flex flex-col lg:flex-row">
+      <h1 className="text-4xl font-semibold text-center mt-[5vh] text-green-400 mb-6">Blog Posts</h1>
+      <p className="text-lg text-center mt-[5vh] text-gray-400 mb-6">"Only Admins Can Post Blogs"</p>
+      <div className="max-w-7xl mt-[1vh] mx-auto p-6 rounded-lg shadow-md shadow-gray-700 flex flex-col lg:flex-row bg-gray-800">
         <div className="lg:w-2/3">
           <div className="flex flex-col gap-4 mb-6">
             <input
               type="text"
-              className="p-3 border border-gray-300 shadow-md shadow-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="p-3 border border-gray-600 shadow-md shadow-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-700 text-gray-100"
               value={newBlog.title}
               onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
               placeholder="Title"
             />
             <textarea
-              className="p-3 border border-gray-300 shadow-md shadow-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="p-3 border border-gray-600 shadow-md shadow-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-700 text-gray-100"
               value={newBlog.content}
               onChange={(e) => setNewBlog({ ...newBlog, content: e.target.value })}
               placeholder="Content"
             />
             <input
               type="text"
-              className="p-3 border border-gray-300 shadow-md shadow-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="p-3 border border-gray-600 shadow-md shadow-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-700 text-gray-100"
               value={newBlog.author}
               onChange={(e) => setNewBlog({ ...newBlog, author: e.target.value })}
               placeholder="Author"
             />
             <button
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 shadow-lg shadow-blue-600 transition-all duration-300"
+              className="px-6 py-3 bg-green-500 text-gray-900 rounded-lg hover:bg-green-400 shadow-lg shadow-green-700 transition-all duration-300"
               onClick={handleCreateBlog}
             >
               Add Blog
@@ -203,19 +202,24 @@ const Blogs = () => {
           </div>
           <ul className="space-y-4">
             {blogs.map((blog) => (
-              <li key={blog._id} className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-all duration-300">
+              <li
+                key={blog._id}
+                className="flex flex-col p-4 bg-gray-800 rounded-lg shadow-sm hover:bg-gray-700 transition-all duration-300"
+              >
                 {blog.thumbnail && (
                   <Image
                     src={blog.thumbnail}
                     alt="Blog Thumbnail"
                     width={100}
                     height={100}
-                    className="w-full h-40 object-cover rounded-lg mb-4"
+                    className="w-full h-40 object-cover rounded-lg mb-4 shadow-lg shadow-gray-500"
                   />
                 )}
-                <h2 className="text-lg font-bold text-gray-700">{blog.title}</h2>
-                <p className="text-gray-600">{blog.content}</p>
-                <p className="text-sm text-gray-500 mt-2">By {blog.author} on {new Date(blog.createdAt).toLocaleDateString()}</p>
+                <h2 className="text-lg font-bold text-green-400">{blog.title}</h2>
+                <p className="text-gray-300">{blog.content}</p>
+                <p className="text-sm text-gray-500 mt-2">
+                  By {blog.author} on {new Date(blog.createdAt).toLocaleDateString()}
+                </p>
                 <button
                   className="mt-3 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300"
                   onClick={() => handleDeleteBlog(blog._id)}
@@ -228,9 +232,9 @@ const Blogs = () => {
         </div>
 
         {/* Image upload placeholder */}
-        <div className="hidden md:flex lg:w-1/3 pl-[25vh] items-center justify-center">
+        <div className="hidden md:flex lg:w-1/3 pl-[25vh] items-center justify-center pb-[45vh]">
           <label htmlFor="thumbnail-upload" className="cursor-pointer">
-            <div className="w-[25vh] h-[25vh] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+            <div className="w-[25vh] h-[25vh] border-2 border-dashed border-green-400 rounded-lg flex items-center justify-center">
               {newBlog.thumbnail ? (
                 <Image
                   src={newBlog.thumbnail}
@@ -240,7 +244,7 @@ const Blogs = () => {
                   className="w-full h-full object-cover rounded-lg"
                 />
               ) : (
-                <Camera size={48} className="text-gray-400" />
+                <Camera size={55} className="text-green-400" />
               )}
             </div>
           </label>
@@ -258,4 +262,3 @@ const Blogs = () => {
 };
 
 export default Blogs;
-
