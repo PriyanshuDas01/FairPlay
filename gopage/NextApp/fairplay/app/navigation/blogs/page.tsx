@@ -101,13 +101,12 @@
 //   )
 // }
 
-
 'use client';
 import { useEffect, useState } from 'react';
 import { getBlogs, createBlog, updateBlog, deleteBlog } from '@/lib/api';
 import Navbar from '@/components/nav';
-import Img1 from "@/images/1.jpg";
 import Image from 'next/image';
+import { Camera } from 'lucide-react';
 
 interface Blog {
   _id: string;
@@ -115,31 +114,32 @@ interface Blog {
   content: string;
   author: string;
   createdAt: string;
+  thumbnail?: string;
 }
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [newBlog, setNewBlog] = useState({ title: '', content: '', author: '' });
+  const [newBlog, setNewBlog] = useState({ title: '', content: '', author: '', thumbnail: '' });
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const data = await getBlogs();
-        setBlogs(data);
-      } catch (error) {
-        console.error('Failed to fetch blogs:', error);
-      }
-    };
     fetchBlogs();
   }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const data = await getBlogs();
+      setBlogs(data);
+    } catch (error) {
+      console.error('Failed to fetch blogs:', error);
+    }
+  };
 
   const handleCreateBlog = async () => {
     if (newBlog.title.trim() && newBlog.content.trim() && newBlog.author.trim()) {
       try {
-        // Fix here: Pass individual properties instead of the whole object
-        const blog = await createBlog(newBlog.title, newBlog.content, newBlog.author);
+        const blog = await createBlog(newBlog.title, newBlog.content, newBlog.author, newBlog.thumbnail);
         setBlogs((prev) => [...prev, blog]);
-        setNewBlog({ title: '', content: '', author: '' });
+        setNewBlog({ title: '', content: '', author: '', thumbnail: '' });
       } catch (error) {
         console.error('Failed to create blog:', error);
       }
@@ -152,6 +152,17 @@ const Blogs = () => {
       setBlogs((prev) => prev.filter((blog) => blog._id !== id));
     } catch (error) {
       console.error('Failed to delete blog:', error);
+    }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewBlog({ ...newBlog, thumbnail: reader.result as string });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -193,6 +204,15 @@ const Blogs = () => {
           <ul className="space-y-4">
             {blogs.map((blog) => (
               <li key={blog._id} className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-all duration-300">
+                {blog.thumbnail && (
+                  <Image
+                    src={blog.thumbnail}
+                    alt="Blog Thumbnail"
+                    width={100}
+                    height={100}
+                    className="w-full h-40 object-cover rounded-lg mb-4"
+                  />
+                )}
                 <h2 className="text-lg font-bold text-gray-700">{blog.title}</h2>
                 <p className="text-gray-600">{blog.content}</p>
                 <p className="text-sm text-gray-500 mt-2">By {blog.author} on {new Date(blog.createdAt).toLocaleDateString()}</p>
@@ -207,12 +227,29 @@ const Blogs = () => {
           </ul>
         </div>
 
-        {/* Image for larger screens */}
-        <div className="hidden md:block lg:w-2/3 pl-[25vh]">
-          <Image
-            src={Img1}
-            alt="Opening Image"
-            className="w-[25vh] h-[25vh] object-cover"
+        {/* Image upload placeholder */}
+        <div className="hidden md:flex lg:w-1/3 pl-[25vh] items-center justify-center">
+          <label htmlFor="thumbnail-upload" className="cursor-pointer">
+            <div className="w-[25vh] h-[25vh] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+              {newBlog.thumbnail ? (
+                <Image
+                  src={newBlog.thumbnail}
+                  alt="Blog Thumbnail"
+                  width={250}
+                  height={250}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <Camera size={48} className="text-gray-400" />
+              )}
+            </div>
+          </label>
+          <input
+            id="thumbnail-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
           />
         </div>
       </div>
@@ -221,3 +258,4 @@ const Blogs = () => {
 };
 
 export default Blogs;
+

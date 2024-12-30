@@ -31,13 +31,13 @@ export const getBlogs = async () => {
   return response.data;
 };
 
-export const createBlog = async (title: string, content: string, author: string) => {
-  const response = await apiClient.post('/blogs', { title, content, author });
+export const createBlog = async (title: string, content: string, author: string, thumbnail: string) => {
+  const response = await apiClient.post('/blogs', { title, content, author, thumbnail });
   return response.data;
 };
 
-export const updateBlog = async (id: string, title: string, content: string, author: string) => {
-  const response = await apiClient.patch(`/blogs/${id}`, { title, content, author });
+export const updateBlog = async (id: string, title: string, content: string, author: string, thumbnail: string) => {
+  const response = await apiClient.patch(`/blogs/${id}`, { title, content, author, thumbnail });
   return response.data;
 };
 
@@ -45,3 +45,4 @@ export const deleteBlog = async (id: string) => {
   const response = await apiClient.delete(`/blogs/${id}`);
   return response.data;
 };
+
