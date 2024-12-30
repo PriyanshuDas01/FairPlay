@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api',
+  // baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api',
+
+  
+  // for production
+  baseURL: '/api',
 });
 
 // Tasks
@@ -15,7 +19,7 @@ export const createTask = async (body: string) => {
   return response.data;
 };
 
-export const updateTask = async (id: string, body: string) => {
+export const updateTask = async (id: string, body: string, completed: boolean) => {
   const response = await apiClient.patch(`/tasks/${id}`, { body });
   return response.data;
 };

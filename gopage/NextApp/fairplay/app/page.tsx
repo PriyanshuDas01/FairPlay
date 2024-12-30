@@ -4,8 +4,11 @@ import FrontPage from "@/components/frontpage";
 // import Tasks from "@/app/navigation/tasks";
 import QuizGame from "@/components/quiz";
 import Blog from "@/components/blogs";
+import FAQ from "@/components/faq";
+import Footer from "@/components/footer";
 
 
+// export const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/api" : "/api";
 
 export default function Home() {
   return (
@@ -26,6 +29,8 @@ export default function Home() {
    <Blog/>
     
    <QuizGame/>
+   <FAQ/>
+   <Footer/>
       
 
 </div>
