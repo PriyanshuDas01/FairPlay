@@ -47,12 +47,12 @@ export default function Tasks() {
     }
   };
 
-  const handleUpdateTask = async (id: string, updatedBody: string) => {
+  const handleUpdateTask = async (id: string, updatedBody: string, completed: boolean = false) => {
     try {
-      await updateTask(id, updatedBody);
+      await updateTask(id, updatedBody, completed);
       setTasks((prev) =>
         prev ? prev.map((task) =>
-          task._id === id ? { ...task, body: updatedBody } : task
+          task._id === id ? { ...task, body: updatedBody, completed } : task
         ) : null
       );
     } catch (error) {
@@ -130,14 +130,14 @@ export default function Tasks() {
                   className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
                 >
                   <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      checked={task.completed}
-                      onChange={async () => {
-                        await handleUpdateTask(task._id, task.body);
+                    <button
+                      onClick={async () => {
+                        await handleUpdateTask(task._id, task.body, true);
                       }}
-                      className="mt-1.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
+                      className="mt-1 px-3 py-1 text-xs font-medium bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors"
+                    >
+                      Done
+                    </button>
                     <div className="flex-grow">
                       <input
                         type="text"
@@ -178,20 +178,13 @@ export default function Tasks() {
                   className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
                 >
                   <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      checked={task.completed}
-                      onChange={async () => {
-                        await handleUpdateTask(task._id, task.body);
-                      }}
-                      className="mt-1.5 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                    />
                     <div className="flex-grow">
                       <input
                         type="text"
                         value={task.body}
-                        onChange={(e) => handleUpdateTask(task._id, e.target.value)}
+                        onChange={(e) => handleUpdateTask(task._id, e.target.value, true)}
                         className="w-full bg-transparent border-0 p-0 focus:ring-0 text-gray-500 line-through"
+                        readOnly
                       />
                       <div className="mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
