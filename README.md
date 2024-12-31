@@ -25,6 +25,9 @@ In **DopeCop**, players assume the role of an undercover agent from the anti-dop
 - **Interactive Quizzes**: Real-time multiple-choice questions reinforce key concepts related to anti-doping regulations.
 - **Dynamic Storyline**: Player decisions impact the game's outcome, enhancing engagement and learning.
 
+![Screenshot 2024-09-30 214153](https://github.com/user-attachments/assets/8b93e908-8108-4824-9981-303d5858b7f4)
+
+
 ## Tech Stack
 
 | Technology | Description |
