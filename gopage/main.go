@@ -339,7 +339,7 @@ func main() {
 	}
 
 	if os.Getenv("ENV") == "production" {
-		app.Static("/", "./fairplay/.next/static")
+		app.Static("/", "./fairplay/.next")
 	}
 	log.Fatal(app.Listen("0.0.0.0:" + port))
 }
