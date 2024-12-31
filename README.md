@@ -4,7 +4,9 @@
 
 **Fairplay** is a gamified educational platform designed to provide athletes with essential knowledge about anti-doping regulations. Built using a modern tech stack, including **Next.js**, **C#**, **GO**, and **MongoDB**, this project aims to deliver real-time updates and engaging educational content. The platform integrates the **DopeCop** game, an interactive 3D experience that educates users on anti-doping principles.
 
-Fairplay Logo
+
+![logo](https://github.com/user-attachments/assets/2ae407a0-66b4-461d-bec2-b0ef40605fad)
+
 
 ## Features
 
@@ -12,7 +14,7 @@ Fairplay Logo
 - **Dynamic Educational Platform**: Utilizes Next.js to provide real-time updates on anti-doping news and blogs tailored for athletes.
 - **Interactive Learning through Gaming**: Integrates the "DopeCop" 3D Unity game, which educates users about anti-doping regulations through immersive gameplay.
 
-## DopeCop Game Overview
+## DopeCop Game Overview |[GitHub Repo for DopeCop](https://github.com/PriyanshuDas01/DopeCop-Host).
 
 In **DopeCop**, players assume the role of an undercover agent from the anti-doping bureau, tasked with chasing down athletes who may be violating doping regulations. The game combines thrilling chases with real-time quizzes, allowing players to learn about anti-doping rules while enjoying an engaging experience.
 
