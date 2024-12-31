@@ -119,3 +119,20 @@ This command will monitor your Go files for changes and automatically reload the
 - Expand the database with more educational resources.
 - Implement user feedback mechanisms to improve content relevance.
 
+  ### Platform ScreenShorts
+![image](https://github.com/user-attachments/assets/97517591-1616-4331-93bf-4245bce34007)
+
+  ![image](https://github.com/user-attachments/assets/92984105-ea5c-43d6-b325-afb48ed87863)
+   ![image](https://github.com/user-attachments/assets/16cdca2f-3fb4-41e2-849c-4479f5b72f49)
+  ![image](https://github.com/user-attachments/assets/2a91dbd8-8c8a-4835-864f-ece50d36dcca)
+
+  ![image](https://github.com/user-attachments/assets/a0171b14-add0-4a79-a073-2fa6bc798722)
+ ![image](https://github.com/user-attachments/assets/302760ff-baa4-4487-8a3d-72190d7ab4f9)
+
+
+
+### Dopecop Game
+
+  ![Screenshot 2024-09-30 180558](https://github.com/user-attachments/assets/323f6cb1-aa95-4033-bcec-826fd719375e)
+
+
