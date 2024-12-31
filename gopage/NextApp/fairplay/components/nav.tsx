@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center text-white text-xl font-bold">
+            <Link href="/" className="flex items-center text-white text-xl font-bold">
               <Image
                 src={Img1}
                 alt="FairPlay Logo"
@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
                 className="mr-2"
               />
               FairPlay
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Menu */}

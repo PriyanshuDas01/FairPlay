@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+// import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft } from 'lucide-react'
+// import { ArrowLeft } from 'lucide-react'
 import { quizQuestions } from '@/lib/quiz-question'
 import Img1 from '@/images/frontpagesm.jpg'
 import Img2 from '@/images/logo.png'

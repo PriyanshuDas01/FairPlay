@@ -291,7 +291,7 @@ export default function Blog() {
 
         {/* Recent Articles Grid */}
         <section className="container mx-auto px-4 py-12">
-          <h2 className="mb-8 text-2xl font-bold text-white">Featured Articles</h2>
+          <h2 className="mb-8 text-2xl font-bold text-green-400">Featured Articles</h2>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {blogs.slice(0, 3).map((blog) => (
               <article key={blog._id} className="group cursor-pointer space-y-4" onClick={() => handleBlogClick(blog)}>
@@ -314,9 +314,11 @@ export default function Blog() {
 
         {/* Older Articles Side-Scroll */}
         <section className="container mx-auto px-4 py-12">
-          <h2 className="mb-8 text-2xl font-bold text-white">Other Articles</h2>
+          <h2 className="mb-8 text-2xl font-bold text-green-400">Other Articles</h2>
           <div className="relative">
-         
+            <button onClick={scrollLeft} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-green-700 p-2 rounded-full shadow-md z-10">
+              <ChevronLeft className="w-6 h-6 text-green-200" />
+            </button>
             <div ref={scrollContainerRef} className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
               {blogs.slice(3).map((blog) => (
                 <article key={blog._id} className="flex-shrink-0 w-64 cursor-pointer space-y-4" onClick={() => handleBlogClick(blog)}>

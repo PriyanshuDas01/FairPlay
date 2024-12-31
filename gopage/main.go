@@ -251,7 +251,6 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -307,13 +306,13 @@ func main() {
 	// Initialize the Fiber app
 	app := fiber.New()
 
-	// CORS Middleware
-	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:3000",
-		AllowMethods:     "GET,POST,PATCH,DELETE",
-		AllowHeaders:     "Content-Type, Authorization",
-		AllowCredentials: true,
-	}))
+	// // CORS Middleware
+	// app.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     "http://localhost:3000",
+	// 	AllowMethods:     "GET,POST,PATCH,DELETE",
+	// 	AllowHeaders:     "Content-Type, Authorization",
+	// 	AllowCredentials: true,
+	// }))
 
 	app.Use(func(c *fiber.Ctx) error {
 		log.Printf("Received request: %s %s", c.Method(), c.Path())
@@ -337,6 +336,10 @@ func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "5000"
+	}
+
+	if os.Getenv("ENV") == "production" {
+		app.Static("/", "./fairplay/.next/static")
 	}
 	log.Fatal(app.Listen("0.0.0.0:" + port))
 }

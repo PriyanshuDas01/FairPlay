@@ -19,7 +19,7 @@ export const createTask = async (body: string) => {
   return response.data;
 };
 
-export const updateTask = async (id: string, body: string, completed: boolean) => {
+export const updateTask = async (id: string, body: string) => {
   const response = await apiClient.patch(`/tasks/${id}`, { body });
   return response.data;
 };
